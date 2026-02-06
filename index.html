@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Interactive Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="box">
+    <h2>Login</h2>
+
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+
+    <div class="eye" onclick="togglePassword()">👁 Show / Hide Password</div>
+
+    <button id="loginBtn" onclick="login()">Login</button>
+
+    <div class="msg" id="message"></div>
+</div>
+
+<script>
+    let attempts = 0;
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            login();
+        }
+    });
+
+    function togglePassword() {
+        let pwd = document.getElementById("password");
+        pwd.type = pwd.type === "password" ? "text" : "password";
+    }
+
+    function login() {
+        let user = document.getElementById("username").value.trim();
+        let pass = document.getElementById("password").value.trim();
+        let msg = document.getElementById("message");
+        let btn = document.getElementById("loginBtn");
+
+        if (user === "" || pass === "") {
+            msg.innerHTML = "⚠ Please fill all fields";
+            msg.style.color = "red";
+            return;
+        }
+
+        msg.innerHTML = "⏳ Checking credentials...";
+        msg.style.color = "black";
+
+        setTimeout(() => {
+            if (user === "admin" && pass === "1234") {
+                msg.innerHTML = "✅ Welcome, " + user + "!";
+                msg.style.color = "green";
+                btn.disabled = true;
+            } else {
+                attempts++;
+                msg.innerHTML = "❌ Invalid login (" + attempts + "/3)";
+                msg.style.color = "red";
+
+                if (attempts >= 3) {
+                    btn.disabled = true;
+                    msg.innerHTML = "🔒 Account Locked. Try later.";
+                }
+            }
+        }, 1200);
+    }
+</script>
+
+</body>
+</html>
